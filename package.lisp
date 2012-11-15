@@ -2,7 +2,10 @@
 
 (restas:define-module #:restas-twitter
   (:use #:cl)
-  (:export #:*host*
+  (:export #:*key*
+	   #:*secret*
+	   #:*host*
 	   #:*port*
 	   #:*redirect-uri*
-	   #:auth))
+	   #:auth
+	   #:get-auth-uri))
