@@ -6,5 +6,9 @@
 	   #:*secret*
 	   #:*host*
 	   #:*redirect-uri*
+	   #:*login-function*
+	   #:*logout-function*
+	   #:get-access-token-screen-name
+	   #:simple-get-user-auth
 	   #:logout
 	   #:get-auth-uri))

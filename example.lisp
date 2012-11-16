@@ -1,6 +1,7 @@
 (restas:define-module #:twitter-test
     (:use #:cl)
-  (:export #:start))
+  (:export #:start
+	   #:start2))
 
 (in-package #:twitter-test)
 
@@ -20,4 +21,19 @@
     (restas-twitter-auth:*key* "")    ;; Obtain from dev.twitter.com,
     (restas-twitter-auth:*secret* "") ;; after registering app.
     (restas-twitter-auth:*redirect-uri* "/"))
-  (restas:start '#:test :port 8080 :hostname "localhost"))
+  (restas:start '#:twitter-test :port 8080 :hostname "localhost"))
+
+(defun start2 ()
+  (restas:mount-submodule twitter-auth (#:restas-twitter-auth)
+    (restas-twitter-auth:*baseurl* '("twitter")) ; optional
+    (restas-twitter-auth:*key* "") ;; Obtain from dev.twitter.com,
+    (restas-twitter-auth:*secret* "") ;; after registering app.
+    (restas-twitter-auth:*redirect-uri* "/")
+    (restas-twitter-auth:*login-function*
+     #'(lambda (access-token)
+	 (setf (hunchentoot:session-value :auth)
+	       (restas-twitter-auth:get-access-token-screen-name access-token))))
+    (restas-twitter-auth:*logout-function*
+     #'(lambda ()
+	 (hunchentoot:delete-session-value :auth))))
+  (restas:start '#:twitter-test :port 8080 :hostname "localhost"))
